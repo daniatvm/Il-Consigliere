@@ -8,8 +8,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //RUTAS
-const usersRouter = require('./routes/UserRoutes');
-app.use('/users', usersRouter);
+const userRouter = require('./routes/UserRoutes');
+app.use('/usuario', userRouter);
+const emailRouter = require('./routes/EmailRouter');
+app.use('/correo', emailRouter);
+const roleRouter = require('./routes/RoleRoutes');
+app.use('/permiso', roleRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

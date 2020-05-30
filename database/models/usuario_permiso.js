@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Usuario_Permiso = sequelize.define('Usuario_Permiso', {
-    id_usuario_permiso: { type: DataTypes.INTEGER, primaryKey: true, allowNull: false },
+    id_usuario_permiso: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     cedula: {
       type: DataTypes.STRING, allowNull: false, references: {
         model: {

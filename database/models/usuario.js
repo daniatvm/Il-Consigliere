@@ -7,11 +7,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     freezeTableName: true
   });
-  Usuario.associate = function(models) {
-    Usuario.belongsToMany(models.Permiso, {
-      through: models.Usuario_Permiso
-    });
-    Usuario.hasMany(models.Correo);
-  };
+  Usuario.associate = function(models) {};
   return Usuario;
 };

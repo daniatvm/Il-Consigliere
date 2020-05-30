@@ -12,8 +12,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     freezeTableName: true
   });
-  Correo.associate = function (models) {
-    Correo.belongsTo(models.Usuario);
-  };
+  Correo.associate = function (models) {};
   return Correo;
 };
