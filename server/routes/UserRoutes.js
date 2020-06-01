@@ -10,5 +10,6 @@ router.post('/cambiar_clave/:cedula', UserController.change_password.bind(UserCo
 router.get('/:cedula', UserController.getUser.bind(UserController));
 router.delete('/:cedula', UserController.remove.bind(UserController));
 router.put('/:cedula', UserController.update.bind(UserController));
+router.post('/verificar_token', UserController.verifyToken.bind(UserController));
 
 module.exports = router;

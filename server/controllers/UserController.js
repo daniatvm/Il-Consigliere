@@ -1,5 +1,7 @@
 const db = require('../../database/models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 class UserController {
 
@@ -53,14 +55,25 @@ class UserController {
                 if (user) {
                     const match = await bcrypt.compare(clave, user.clave);
                     if (match) {
-                        res.status(200).send('success');
+                        const info = {
+                            cedula: user.cedula,
+                            nombre: user.nombre,
+                            apellido: user.apellido
+                        }
+                        const token = jwt.sign({ user: info }, process.env.KEY, { algorithm: 'HS512' });
+                        res.json({
+                            success: true,
+                            token: token
+                        });
                     } else {
-                        res.status(406).json({
+                        res.json({
+                            success: false,
                             msg: 'Credenciales Incorrectos.'
                         });
                     }
                 } else {
-                    res.status(406).json({
+                    res.json({
+                        success: false,
                         msg: 'Usuario no existe.'
                     });
                 }
@@ -132,6 +145,31 @@ class UserController {
         } catch (error) {
             res.status(500).json({
                 msg: 'Error interno del servidor.'
+            });
+        }
+    }
+
+    static async verifyToken(req, res) {
+        const bearerHeader = req.headers['authorization'];
+        let token = '';
+        if (typeof bearerHeader !== 'undefined') {
+            const bearer = bearerHeader.split(' ');
+            token = bearer[1];
+            try {
+                var decoded = jwt.verify(token, process.env.KEY, {algorithm: 'HS512'});
+                res.json({
+                    token: decoded
+                })
+            } catch (err) {
+                res.json({
+                    success: false,
+                    msg: "Token corrupto."
+                });
+            }
+        } else {
+            res.json({
+                success: false,
+                msg: "No ha iniciado sesión."
             });
         }
     }
