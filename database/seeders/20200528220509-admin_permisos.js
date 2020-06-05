@@ -7,14 +7,6 @@ module.exports = {
     {
       cedula: '117200790',
       id_permiso: 2
-    },
-    {
-      cedula: '117200790',
-      id_permiso: 3
-    },
-    {
-      cedula: '117200790',
-      id_permiso: 1
     }]);
   },
 

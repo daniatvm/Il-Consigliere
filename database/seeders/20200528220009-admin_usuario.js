@@ -4,7 +4,7 @@ module.exports = {
       cedula: '117200790',
       nombre: 'Daniela',
       apellido: 'Campos',
-      clave: 'hola123'
+      clave: '$2b$10$UNirhtnN73DPD75jYoh11edJ4HIrxm1GhB8I.bWI2vrBAdDUmWqzC'
     }])
   },
 

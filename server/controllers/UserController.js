@@ -63,7 +63,8 @@ class UserController {
                         const token = jwt.sign({ user: info }, process.env.KEY, { algorithm: 'HS512' });
                         res.json({
                             success: true,
-                            token: token
+                            token: token,
+                            info: info
                         });
                     } else {
                         res.json({
@@ -85,7 +86,7 @@ class UserController {
         }
     }
 
-    static async change_password(req, res) {
+    static async changePassword(req, res) {
         const { clave } = req.body;
         try {
             await db.sequelize.transaction(async t => {
@@ -149,15 +150,16 @@ class UserController {
         }
     }
 
-    static async verifyToken(req, res) {
+    static verifyToken(req, res) {
         const bearerHeader = req.headers['authorization'];
         let token = '';
         if (typeof bearerHeader !== 'undefined') {
             const bearer = bearerHeader.split(' ');
             token = bearer[1];
             try {
-                var decoded = jwt.verify(token, process.env.KEY, {algorithm: 'HS512'});
+                let decoded = jwt.verify(token, process.env.KEY, { algorithm: 'HS512' });
                 res.json({
+                    success: true,
                     token: decoded
                 })
             } catch (err) {
@@ -170,6 +172,25 @@ class UserController {
             res.json({
                 success: false,
                 msg: "No ha iniciado sesión."
+            });
+        }
+    }
+
+    static async roles(req, res) {
+        try {
+            db.sequelize.transaction(async t => {
+                const roles = await db.Usuario_Permiso.findAll({ where: { cedula: req.params.cedula } });
+                if (roles.length > 0) {
+                    res.send(roles);
+                } else {
+                    res.json({
+                        msg: 'No tiene permisos asociados.'
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                msg: 'Error interno del servidor.'
             });
         }
     }
