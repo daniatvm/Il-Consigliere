@@ -179,7 +179,7 @@ class UserController {
     static async roles(req, res) {
         try {
             db.sequelize.transaction(async t => {
-                const roles = await db.Usuario_Permiso.findAll({ where: { cedula: req.params.cedula } });
+                const roles = await db.Usuario_Permiso.findAll({ attributes: ['id_permiso'], where: { cedula: req.params.cedula } });
                 if (roles.length > 0) {
                     res.send(roles);
                 } else {
