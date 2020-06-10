@@ -5,6 +5,6 @@ const router = Router();
 
 router.get('/:cedula', EmailController.getEmails);
 router.post('/:cedula', EmailController.store);
-router.delete('/:correo', EmailController.remove);
+router.delete('/', EmailController.remove);
 
 module.exports = router;

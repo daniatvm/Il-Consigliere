@@ -92,7 +92,9 @@ class UserController {
             await db.sequelize.transaction(async t => {
                 const encryptedPass = await this.encryptPassword(clave);
                 await db.Usuario.update({ clave: encryptedPass }, { where: { cedula: req.params.cedula } });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -185,6 +187,37 @@ class UserController {
                 } else {
                     res.json({
                         msg: 'No tiene permisos asociados.'
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                msg: 'Error interno del servidor.'
+            });
+        }
+    }
+
+    static async verifyPassword(req, res) {
+        const { cedula, clave } = req.body;
+        try {
+            await db.sequelize.transaction(async t => {
+                const user = await db.Usuario.findOne({ where: { cedula: cedula } });
+                if (user) {
+                    const match = await bcrypt.compare(clave, user.clave);
+                    if (match) {
+                        res.json({
+                            success: true
+                        });
+                    } else {
+                        res.json({
+                            success: false,
+                            msg: 'Credenciales Incorrectos.'
+                        });
+                    }
+                } else {
+                    res.json({
+                        success: false,
+                        msg: 'Usuario no existe.'
                     });
                 }
             });

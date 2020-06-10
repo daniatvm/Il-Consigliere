@@ -5,7 +5,7 @@ class EmailController {
     static async getEmails(req, res) {
         try {
             await db.sequelize.transaction(async t => {
-                const emails = await db.Correo.findAll({ where: { cedula: req.params.cedula } });
+                const emails = await db.Correo.findAll({ attributes: ['correo'], where: { cedula: req.params.cedula } });
                 if (emails.length > 0) {
                     res.status(200).send(emails);
                 } else {
@@ -35,10 +35,11 @@ class EmailController {
         }
     }
 
-    static async remove(req,res){
+    static async remove(req, res) {
         try {
+            const { correo } = req.body;
             await db.sequelize.transaction(async t => {
-                await db.Correo.destroy({ where: { correo: req.params.correo } });
+                await db.Correo.destroy({ where: { correo: correo } });
                 res.status(200).send('success');
             });
         } catch (error) {

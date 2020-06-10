@@ -12,5 +12,6 @@ router.delete('/:cedula', UserController.remove.bind(UserController));
 router.put('/:cedula', UserController.update.bind(UserController));
 router.post('/verificar_token', UserController.verifyToken.bind(UserController));
 router.get('/permisos/:cedula', UserController.roles.bind(UserController));
+router.post('/verificar_clave', UserController.verifyPassword.bind(UserController));
 
 module.exports = router;
