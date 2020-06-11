@@ -2,14 +2,18 @@ const db = require('../../database/models');
 
 class RoleController {
 
-    static async getRoles(req,res){
+    static async getRoles(req, res) {
         try {
             await db.sequelize.transaction(async t => {
                 const roles = await db.Permiso.findAll();
                 if (roles.length > 0) {
-                    res.status(200).send(roles);
+                    res.json({
+                        success: true,
+                        roles: roles
+                    });
                 } else {
-                    res.status(200).json({
+                    res.json({
+                        success: false,
                         msg: 'No se encontraron permisos.'
                     });
                 }
@@ -21,12 +25,14 @@ class RoleController {
         }
     }
 
-    static async store(req,res){
+    static async store(req, res) {
         const { nombre } = req.body;
         try {
             await db.sequelize.transaction(async t => {
                 await db.Permiso.create({ nombre: nombre });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -35,11 +41,13 @@ class RoleController {
         }
     }
 
-    static async remove(req, res){
+    static async remove(req, res) {
         try {
             await db.sequelize.transaction(async t => {
                 await db.Permiso.destroy({ where: { id_permiso: req.params.id } });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
