@@ -7,7 +7,9 @@ class UserRoleController {
         try {
             await db.sequelize.transaction(async t => {
                 await db.Usuario_Permiso.create({ cedula: cedula, id_permiso: id_permiso });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -20,7 +22,9 @@ class UserRoleController {
         try {
             await db.sequelize.transaction(async t => {
                 await db.Usuario_Permiso.destroy({ where: { cedula: req.params.cedula } });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({

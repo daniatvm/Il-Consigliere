@@ -12,9 +12,13 @@ class UserController {
                     attributes: ['cedula', 'nombre', 'apellido']
                 });
                 if (users.length > 0) {
-                    res.status(200).send(users);
+                    res.json({
+                        success: true,
+                        users: users
+                    });
                 } else {
-                    res.status(200).json({
+                    res.json({
+                        success: false,
                         msg: 'No se encontraron usuarios.'
                     });
                 }
@@ -34,11 +38,17 @@ class UserController {
 
     static async store(req, res) {
         const { cedula, nombre, apellido, clave } = req.body;
+        console.log(req.body);
         try {
             await db.sequelize.transaction(async t => {
                 const encryptedPass = await this.encryptPassword(clave);
-                await db.Usuario.create({ cedula: cedula, nombre: nombre, apellido: apellido, clave: encryptedPass });
-                res.status(200).send('success');
+                await db.Usuario.create({
+                    cedula: cedula, nombre: nombre,
+                    apellido: apellido, clave: encryptedPass
+                });
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -60,7 +70,8 @@ class UserController {
                             nombre: user.nombre,
                             apellido: user.apellido
                         }
-                        const token = jwt.sign({ user: info }, process.env.KEY, { algorithm: 'HS512' });
+                        const token = jwt.sign({ user: info }, process.env.KEY,
+                            { algorithm: 'HS512' });
                         res.json({
                             success: true,
                             token: token,
@@ -91,7 +102,8 @@ class UserController {
         try {
             await db.sequelize.transaction(async t => {
                 const encryptedPass = await this.encryptPassword(clave);
-                await db.Usuario.update({ clave: encryptedPass }, { where: { cedula: req.params.cedula } });
+                await db.Usuario.update({ clave: encryptedPass },
+                    { where: { cedula: req.params.cedula } });
                 res.json({
                     success: true
                 });
@@ -111,9 +123,13 @@ class UserController {
                     where: { cedula: req.params.cedula }
                 });
                 if (user) {
-                    res.status(200).send(user);
+                    res.json({
+                        success: true,
+                        user: user
+                    });
                 } else {
-                    res.status(200).json({
+                    res.json({
+                        success: false,
                         msg: 'No se encontró el usuario.'
                     });
                 }
@@ -129,7 +145,9 @@ class UserController {
         try {
             await db.sequelize.transaction(async t => {
                 await db.Usuario.destroy({ where: { cedula: req.params.cedula } });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -143,7 +161,9 @@ class UserController {
         try {
             await db.sequelize.transaction(async t => {
                 await db.Usuario.update({ cedula: cedula, nombre: nombre, apellido: apellido }, { where: { cedula: req.params.cedula } });
-                res.status(200).send('success');
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
@@ -183,9 +203,13 @@ class UserController {
             db.sequelize.transaction(async t => {
                 const roles = await db.Usuario_Permiso.findAll({ attributes: ['id_permiso'], where: { cedula: req.params.cedula } });
                 if (roles.length > 0) {
-                    res.send(roles);
+                    res.json({
+                        success: true,
+                        roles: roles
+                    });
                 } else {
                     res.json({
+                        success: false,
                         msg: 'No tiene permisos asociados.'
                     });
                 }
