@@ -42,9 +42,10 @@ class EmailController {
     }
 
     static async remove(req, res) {
+        const { correo } = req.body;
         try {
             await db.sequelize.transaction(async t => {
-                await db.Correo.destroy({ where: { cedula: req.params.cedula } });
+                await db.Correo.destroy({ where: { correo: correo } });
                 res.json({
                     success: true
                 });
@@ -70,6 +71,21 @@ class EmailController {
                         taken: false
                     });
                 }
+            });
+        } catch (error) {
+            res.status(500).json({
+                msg: 'Error interno del servidor.'
+            });
+        }
+    }
+
+    static async removeById(req, res) {
+        try {
+            await db.sequelize.transaction(async t => {
+                await db.Correo.destroy({ where: { cedula: req.params.cedula } });
+                res.json({
+                    success: true
+                });
             });
         } catch (error) {
             res.status(500).json({
