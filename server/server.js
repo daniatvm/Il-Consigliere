@@ -15,7 +15,7 @@ app.use('/correo', emailRouter);
 const roleRouter = require('./routes/RoleRoutes');
 app.use('/permiso', roleRouter);
 const userRoleRouter = require('./routes/UserRoleRoutes');
-app.use('/usuarioPermiso', userRoleRouter);
+app.use('/usuario_permiso', userRoleRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

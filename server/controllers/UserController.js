@@ -1,6 +1,9 @@
 const db = require('../../database/models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { Op } = require('sequelize');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 class UserController {
@@ -36,9 +39,90 @@ class UserController {
         return hash;
     }
 
+    static async sendLink(req, res) {
+        const { correo, permisos } = req.body;
+        try {
+            await db.sequelize.transaction(async t => {
+                const token = crypto.randomBytes(20).toString('Hex');
+                if (permisos.length === 0) {
+                    await db.Link.create({
+                        token: token,
+                        expiration: Date.now() + 10800000
+                    });
+                } else {
+                    for (let i = 0; i < permisos.length; i++) {
+                        await db.Link.create({
+                            token: token,
+                            expiration: Date.now() + 10800000,
+                            id_permiso: permisos[i]
+                        });
+                    }
+                }
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: `${process.env.EMAIL}`,
+                        pass: `${process.env.EMAIL_PASS}`
+                    }
+                });
+                const mailOptions = {
+                    from: `${process.env.EMAIL}`,
+                    to: `${correo}`,
+                    subject: 'Crea tu cuenta en Il Consigliere',
+                    text:
+                        `Los administradores del Consejo de Ingeniería en Computación han solicitado que seas un participante en el Consejo, por favor haz click en la siguiente dirección y llena los datos solicitados:\n\nhttp://localhost:3000/gUsuarios/registro/${token}\n\nSe le recuerda que esta dirección expirará en 3 horas.\n\nSaludos,\nConsejo de Ingeniería en Computación.`
+                };
+                transporter.sendMail(mailOptions, (err, resp) => {
+                    if (err) {
+                        res.status(500).json({
+                            msg: 'Error.',
+                            err: err
+                        });
+                    } else {
+                        res.json({
+                            success: true,
+                            msg: resp
+                        });
+                    }
+                })
+            });
+        } catch (error) {
+            res.status(500).json({
+                msg: 'Error interno del servidor.'
+            });
+        }
+    }
+
+    static async verifyLink(req, res) {
+        const token = req.params.token;
+        try {
+            await db.sequelize.transaction(async t => {
+                const links = await db.Link.findAll({
+                    attributes: ['id_permiso'],
+                    where: { token: token, expiration: { [Op.gt]: Date.now() } }
+                });
+                await db.Link.destroy({ where: { token: token } });
+                if (links.length !== 0) {
+                    res.json({
+                        success: true,
+                        permisos: links
+                    });
+                } else {
+                    res.json({
+                        success: false,
+                        msg: 'La dirección ha expirado o es inválida.'
+                    });
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                msg: 'Error interno del servidor.'
+            });
+        }
+    }
+
     static async store(req, res) {
         const { cedula, nombre, apellido, clave } = req.body;
-        console.log(req.body);
         try {
             await db.sequelize.transaction(async t => {
                 const encryptedPass = await this.encryptPassword(clave);
