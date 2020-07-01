@@ -1,3 +1,4 @@
 node_modules
-.sequelizerc
+sequelizerc
 .env
+*.log

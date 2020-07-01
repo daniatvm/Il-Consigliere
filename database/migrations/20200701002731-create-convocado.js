@@ -1,29 +1,40 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Usuario_Permiso', {
-      id_usuario_permiso: {
+    return queryInterface.createTable('Convocado', {
+      id_convocado: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      id_consejo: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Consejo',
+          },
+          key: 'id_consejo'
+        }
+      },
       cedula: {
+        allowNull: false,
         type: Sequelize.STRING,
         references: {
-
           model: {
             tableName: 'Usuario',
           },
           key: 'cedula'
         }
       },
-      id_permiso: {
+      id_tipo_convocado: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Permiso',
+            tableName: 'Tipo_Convocado',
           },
-          key: 'id_permiso',
+          key: 'id_tipo_convocado'
         }
       },
       createdAt: {
@@ -39,6 +50,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Usuario_Permiso');
+    return queryInterface.dropTable('Convocado');
   }
 };

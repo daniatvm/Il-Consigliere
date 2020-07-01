@@ -7,6 +7,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     freezeTableName: true
   });
-  Usuario.associate = function(models) {};
+  Usuario.associate = function (models) { };
   return Usuario;
 };

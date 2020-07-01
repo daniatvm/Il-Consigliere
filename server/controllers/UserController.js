@@ -182,12 +182,12 @@ class UserController {
     }
 
     static async changePassword(req, res) {
-        const { clave } = req.body;
+        const { cedula, clave } = req.body;
         try {
             await db.sequelize.transaction(async t => {
                 const encryptedPass = await this.encryptPassword(clave);
                 await db.Usuario.update({ clave: encryptedPass },
-                    { where: { cedula: req.params.cedula } });
+                    { where: { cedula: cedula } });
                 res.json({
                     success: true
                 });
@@ -258,16 +258,15 @@ class UserController {
 
     static verifyToken(req, res) {
         const bearerHeader = req.headers['authorization'];
-        let token = '';
         if (typeof bearerHeader !== 'undefined') {
             const bearer = bearerHeader.split(' ');
-            token = bearer[1];
+            let token = bearer[1];
             try {
                 let decoded = jwt.verify(token, process.env.KEY, { algorithm: 'HS512' });
                 res.json({
                     success: true,
                     token: decoded
-                })
+                });
             } catch (err) {
                 res.json({
                     success: false,

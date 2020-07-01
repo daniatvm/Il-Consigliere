@@ -1,30 +1,25 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Usuario_Permiso', {
-      id_usuario_permiso: {
+    return queryInterface.createTable('Archivo_Punto_Informativo', {
+      id_archivo_punto_informativo: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cedula: {
-        type: Sequelize.STRING,
-        references: {
-
-          model: {
-            tableName: 'Usuario',
-          },
-          key: 'cedula'
-        }
-      },
-      id_permiso: {
+      id_punto_informativo: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Permiso',
+            tableName: 'Punto_Informativo',
           },
-          key: 'id_permiso',
+          key: 'id_punto_informativo'
         }
+      },
+      direccion: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +34,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Usuario_Permiso');
+    return queryInterface.dropTable('Archivo_Punto_Informativo');
   }
 };
