@@ -7,25 +7,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_consejo: {
+      consecutivo: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: {
             tableName: 'Consejo',
           },
-          key: 'id_consejo'
+          key: 'consecutivo'
         }
       },
       cedula: {
         allowNull: false,
-        type: Sequelize.STRING,
-        references: {
-          model: {
-            tableName: 'Usuario',
-          },
-          key: 'cedula'
-        }
+        type: Sequelize.STRING
       },
       id_tipo_convocado: {
         allowNull: false,

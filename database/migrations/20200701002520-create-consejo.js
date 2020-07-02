@@ -1,11 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Consejo', {
-      id_consejo: {
+      consecutivo: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       id_tipo_sesion: {
         allowNull: false,
@@ -19,19 +18,18 @@ module.exports = {
       },
       institucion: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: "Instituto Tecnológico de Costa Rica"
       },
       escuela: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: "Ingeniería en Computación - San José"
       },
       nombre_consejo: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      consecutivo: {
-        allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: "Consejo de Unidad Desconcentrada"
       },
       fecha: {
         allowNull: false,
