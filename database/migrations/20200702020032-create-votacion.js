@@ -1,25 +1,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Punto_Votativo', {
-      id_punto_votativo: {
+    return queryInterface.createTable('Votacion', {
+      id_votacion: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_consejo: {
+      id_punto: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Consejo',
+            tableName: 'Punto',
           },
-          key: 'id_consejo'
+          key: 'id_punto'
         }
-      },
-      asunto: {
-        allowNull: false,
-        type: Sequelize.STRING
       },
       favor: {
         allowNull: false,
@@ -46,6 +42,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Punto_Votativo');
+    return queryInterface.dropTable('Votacion');
   }
 };

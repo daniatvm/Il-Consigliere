@@ -1,25 +1,35 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Punto_Informativo', {
-      id_punto_informativo: {
+    return queryInterface.createTable('Punto', {
+      id_punto: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_consejo: {
+      consecutivo: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: {
             tableName: 'Consejo',
           },
-          key: 'id_consejo'
+          key: 'consecutivo'
         }
       },
       asunto: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      id_tipo_punto: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Tipo_Punto',
+          },
+          key: 'id_tipo_punto'
+        }
       },
       createdAt: {
         allowNull: false,
@@ -34,6 +44,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Punto_Informativo');
+    return queryInterface.dropTable('Punto');
   }
 };
