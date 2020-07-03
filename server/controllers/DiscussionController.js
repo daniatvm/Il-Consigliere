@@ -26,12 +26,11 @@ class DiscussionController {
     }
 
     static async store(req, res) {
-        const { consecutivo, id_tipo_punto, asunto } = req.body;
+        const { consecutivo, asunto } = req.body;
         try {
             await db.sequelize.transaction(async t => {
                 await db.Punto.create({
-                    consecutivo: consecutivo, id_tipo_punto: id_tipo_punto,
-                    asunto: asunto
+                    consecutivo: consecutivo, asunto: asunto
                 });
                 res.json({
                     success: true

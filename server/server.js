@@ -18,6 +18,14 @@ const roleRouter = require('./routes/RoleRoutes');
 app.use('/permiso', roleRouter);
 const userRoleRouter = require('./routes/UserRoleRoutes');
 app.use('/usuario_permiso', userRoleRouter);
+const councilRouter = require('./routes/CouncilRouter');
+app.use('/consejo', councilRouter);
+const attendantRouter = require('./routes/AttendantRouter');
+app.use('/convocado', attendantRouter);
+const discussionRouter = require('./routes/DiscussionRouter');
+app.use('/punto', discussionRouter);
+const councilTypeRouter = require('./routes/CouncilTypeRouter');
+app.use('/tipo_consejo', councilTypeRouter);
 
 //RUTAS DE REACT
 app.get('/*', (req, res) => {
