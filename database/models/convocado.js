@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const Convocado = sequelize.define('Convocado', {
     id_convocado: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     consecutivo: {
-      type: DataTypes.INTEGER, allowNull: false, references: {
+      type: DataTypes.STRING, allowNull: false, references: {
         model: {
           tableName: 'Consejo'
         },

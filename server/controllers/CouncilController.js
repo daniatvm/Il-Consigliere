@@ -5,7 +5,7 @@ class CouncilController {
     static async getCouncils(req, res) {
         try {
             await db.sequelize.transaction(async t => {
-                const councils = await db.Council.findAll();
+                const councils = await db.Consejo.findAll();
                 if (councils.length > 0) {
                     res.json({
                         success: true,
@@ -47,7 +47,7 @@ class CouncilController {
     static async getCouncil(req, res) {
         try {
             await db.sequelize.transaction(async t => {
-                const council = await db.Council.findOne({
+                const council = await db.Consejo.findOne({
                     where: { consecutivo: req.params.consecutivo }
                 });
                 if (council) {
@@ -64,7 +64,7 @@ class CouncilController {
             })
         } catch (error) {
             res.status(500).json({
-                msg: 'Error interno del servidor.'
+                msg: 'Error interno del servidor.',
             });
         }
     }

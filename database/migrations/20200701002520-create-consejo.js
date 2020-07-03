@@ -18,18 +18,15 @@ module.exports = {
       },
       institucion: {
         allowNull: false,
-        type: Sequelize.STRING,
-        defaultValue: "Instituto Tecnológico de Costa Rica"
+        type: Sequelize.STRING
       },
       escuela: {
         allowNull: false,
-        type: Sequelize.STRING,
-        defaultValue: "Ingeniería en Computación - San José"
+        type: Sequelize.STRING
       },
       nombre_consejo: {
         allowNull: false,
-        type: Sequelize.STRING,
-        defaultValue: "Consejo de Unidad Desconcentrada"
+        type: Sequelize.STRING
       },
       fecha: {
         allowNull: false,

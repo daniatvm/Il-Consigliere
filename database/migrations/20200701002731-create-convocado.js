@@ -9,7 +9,7 @@ module.exports = {
       },
       consecutivo: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references: {
           model: {
             tableName: 'Consejo',
