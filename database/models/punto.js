@@ -9,15 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'consecutivo'
       }
     },
-    asunto: { type: DataTypes.STRING, allowNull: false },
-    id_tipo_punto: {
-      type: DataTypes.INTEGER, allowNull: false, references: {
-        model: {
-          tableName: 'Tipo_Punto'
-        },
-        key: 'id_tipo_punto'
-      }
-    }
+    asunto: { type: DataTypes.STRING, allowNull: false }
   }, {
     freezeTableName: true
   });
