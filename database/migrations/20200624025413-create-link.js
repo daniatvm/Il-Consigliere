@@ -19,9 +19,19 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Permiso',
+            tableName: 'Permiso'
           },
-          key: 'id_permiso',
+          key: 'id_permiso'
+        }
+      },
+      id_tipo_convocado: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Tipo_Convocado'
+          },
+          key: 'id_tipo_convocado'
         }
       }
     });

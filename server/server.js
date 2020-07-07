@@ -26,12 +26,14 @@ const discussionRouter = require('./routes/DiscussionRouter');
 app.use('/punto', discussionRouter);
 const councilTypeRouter = require('./routes/CouncilTypeRouter');
 app.use('/tipo_consejo', councilTypeRouter);
+const attendantTypeRouter = require('./routes/AttendantTypeRouter');
+app.use('/tipo_convocado', attendantTypeRouter);
 
 //RUTAS DE REACT
 app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });

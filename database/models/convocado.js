@@ -11,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     cedula: {
       type: DataTypes.STRING, allowNull: false
-    },
-    id_tipo_convocado: {
-      type: DataTypes.INTEGER, allowNull: false
     }
   }, {
     freezeTableName: true
