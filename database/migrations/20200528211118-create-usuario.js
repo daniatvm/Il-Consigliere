@@ -18,6 +18,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      id_tipo_convocado: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'Tipo_Convocado'
+          },
+          key: 'id_tipo_convocado'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATEONLY,

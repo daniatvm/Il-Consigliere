@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'consecutivo'
       }
     },
-    asunto: { type: DataTypes.STRING, allowNull: false }
+    asunto: { type: DataTypes.TEXT, allowNull: false }
   }, {
     freezeTableName: true
   });

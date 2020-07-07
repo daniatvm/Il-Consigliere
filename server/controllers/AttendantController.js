@@ -5,7 +5,7 @@ class AttendantController {
   static async getByCouncil(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const convocados = await db.Convocado.findAll({ where: { consecutivo: req.params.consecutivo } });
+        const convocados = await db.Convocado.findAll({ attributes: ['cedula'], where: { consecutivo: req.params.consecutivo } });
         if (convocados.length > 0) {
           res.json({
             success: true,
@@ -25,10 +25,33 @@ class AttendantController {
     }
   }
 
+  static async getUserNames(req, res) {
+    try {
+      await db.sequelize.transaction(async t => {
+        const convocados = await db.sequelize.query(`SELECT "Usuario"."nombre", "Usuario"."apellido" FROM public."Usuario" INNER JOIN public."Convocado" ON "Usuario"."cedula" = "Convocado"."cedula" WHERE "Convocado"."consecutivo" = '${req.params.consecutivo}'`);
+        if (convocados[0].length > 0) {
+          res.json({
+            success: true,
+            convocados: convocados[0]
+          });
+        } else {
+          res.json({
+            success: false,
+            msg: 'No se encontraron convocados.'
+          });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
   static async getByUser(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const convocados = await db.Convocado.findAll({ attributes: ['consecutivo', 'id_tipo_convocado'], where: { cedula: req.params.cedula } });
+        const convocados = await db.Convocado.findAll({ where: { cedula: req.params.cedula } });
         if (convocados.length > 0) {
           //for y recuperar los consejos
           res.json({
@@ -50,10 +73,12 @@ class AttendantController {
   }
 
   static async store(req, res) {
-    const { consecutivo, cedula, id_tipo_convocado } = req.body;
     try {
       await db.sequelize.transaction(async t => {
-        await db.Convocado.create({ cedula: cedula, consecutivo: consecutivo, id_tipo_convocado: id_tipo_convocado });
+        const { consecutivo, convocados } = req.body;
+        for (let i = 0; i < convocados.length; i++) {
+          await db.Convocado.create({ cedula: convocados[i].cedula, consecutivo: consecutivo });
+        }
         res.json({
           success: true
         });
@@ -83,7 +108,10 @@ class AttendantController {
   static async remove(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        await db.Convocado.destroy({ where: { cedula: req.params.cedula, consecutivo: req.params.consecutivo } });
+        for (let i = 0; i < req.body.noConvocados.length; i++) {
+          let cedula = req.body.noConvocados[i];
+          await db.Convocado.destroy({ where: { cedula: cedula, consecutivo: req.params.consecutivo } });
+        }
         res.json({
           success: true
         });

@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         key: 'id_permiso'
       }
+    },
+    id_tipo_convocado: {
+      type: DataTypes.INTEGER, allowNull: false, references: {
+        model: {
+          tableName: 'Tipo_Convocado'
+        },
+        key: 'id_tipo_convocado'
+      }
     }
   }, {
     freezeTableName: true,
