@@ -26,7 +26,7 @@ class CouncilController {
   }
 
   static async store(req, res) {
-    const { consecutivo, id_tipo_sesion, fecha, hora, lugar, puntos } = req.body;
+    const { consecutivo, id_tipo_sesion, fecha, hora, lugar, puntos, cedula, id_tipo_punto } = req.body;
     try {
       await db.sequelize.transaction(async t => {
         await db.Consejo.create({
@@ -35,7 +35,7 @@ class CouncilController {
         });
         for (let i = 0; i < puntos.length; i++) {
           await db.Punto.create({
-            asunto: puntos[i], consecutivo: consecutivo
+            asunto: puntos[i], consecutivo: consecutivo, cedula: cedula, id_tipo_punto: id_tipo_punto
           });
         }
         res.json({

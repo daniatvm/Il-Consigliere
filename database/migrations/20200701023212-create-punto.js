@@ -21,6 +21,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      cedula: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      id_tipo_punto: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Tipo_Punto'
+          },
+          key: 'id_tipo_punto'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATEONLY,
