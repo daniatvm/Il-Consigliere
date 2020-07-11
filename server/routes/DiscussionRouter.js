@@ -4,10 +4,11 @@ const DiscussionController = require('../controllers/DiscussionController');
 const router = Router();
 
 router.post('/', DiscussionController.store);
-router.get('/por_consejo/:consecutivo', DiscussionController.getByCouncil);
-router.get('/solicitud/:cedula/:consecutivo', DiscussionController.getByUser);
+router.get('/aprobado/:consecutivo', DiscussionController.getDiscussions);
+router.get('/solicitud/:consecutivo', DiscussionController.getRequests);
+router.get('/solicitud/:cedula/:consecutivo', DiscussionController.getRequestsByUser);
 router.put('/:id_punto', DiscussionController.update);
-router.delete('/:id_punto', DiscussionController.remove);
 router.delete('/por_consejo/:consecutivo', DiscussionController.removeByCouncil);
+router.delete('/:id_punto', DiscussionController.remove);
 
 module.exports = router;

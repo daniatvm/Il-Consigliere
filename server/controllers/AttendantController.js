@@ -28,7 +28,7 @@ class AttendantController {
   static async getUserNames(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const convocados = await db.sequelize.query(`SELECT "Usuario"."nombre", "Usuario"."apellido" FROM public."Usuario" INNER JOIN public."Convocado" ON "Usuario"."cedula" = "Convocado"."cedula" WHERE "Convocado"."consecutivo" = '${req.params.consecutivo}'`);
+        const convocados = await db.sequelize.query(`SELECT "Usuario"."nombre", "Usuario"."apellido", "Usuario"."id_tipo_convocado" FROM public."Usuario" INNER JOIN public."Convocado" ON "Usuario"."cedula" = "Convocado"."cedula" WHERE "Convocado"."consecutivo" = '${req.params.consecutivo}'`);
         if (convocados[0].length > 0) {
           res.json({
             success: true,
