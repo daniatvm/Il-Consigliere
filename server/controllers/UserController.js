@@ -12,7 +12,7 @@ class UserController {
     try {
       await db.sequelize.transaction(async t => {
         const users = await db.Usuario.findAll({
-          attributes: ['cedula', 'nombre', 'apellido']
+          attributes: ['cedula', 'nombre', 'apellido'], order: ['nombre']
         });
         if (users.length > 0) {
           res.json({

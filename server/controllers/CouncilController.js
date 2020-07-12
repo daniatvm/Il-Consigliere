@@ -6,7 +6,7 @@ class CouncilController {
   static async getCouncils(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const councils = await db.Consejo.findAll({ where: { fecha: { [Op.gte]: Date.now() } } });
+        const councils = await db.Consejo.findAll({ where: { fecha: { [Op.gte]: Date.now() } }, order: ['fecha'] });
         if (councils.length > 0) {
           res.json({
             success: true,
@@ -52,7 +52,7 @@ class CouncilController {
   static async getCouncilsByUser(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const councils = await db.sequelize.query(`SELECT "Consejo"."institucion", "Consejo"."escuela", "Consejo"."nombre_consejo", "Consejo"."consecutivo", "Consejo"."lugar", "Consejo"."fecha", "Consejo"."hora", "Consejo"."id_tipo_sesion" FROM public."Consejo" INNER JOIN public."Convocado" ON "Consejo"."consecutivo" = "Convocado"."consecutivo" WHERE "Convocado"."cedula" = '${req.params.cedula}' AND "Consejo"."fecha" >= '${req.params.fecha}'`);
+        const councils = await db.sequelize.query(`SELECT "Consejo"."institucion", "Consejo"."escuela", "Consejo"."nombre_consejo", "Consejo"."consecutivo", "Consejo"."lugar", "Consejo"."fecha", "Consejo"."hora", "Consejo"."id_tipo_sesion" FROM public."Consejo" INNER JOIN public."Convocado" ON "Consejo"."consecutivo" = "Convocado"."consecutivo" WHERE "Convocado"."cedula" = '${req.params.cedula}' AND "Consejo"."fecha" >= '${req.params.fecha}' ORDER BY "Consejo"."fecha" ASC`);
         if (councils[0].length > 0) {
           res.json({
             success: true,
@@ -75,11 +75,34 @@ class CouncilController {
   static async getCouncilsBefore(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const councils = await db.Consejo.findAll({ limit: 6, where: { fecha: { [Op.lt]: Date.now() } } })
+        const councils = await db.Consejo.findAll({ limit: 6, where: { fecha: { [Op.lt]: Date.now() } }, order: ['fecha'] });
         if (councils.length > 0) {
           res.json({
             success: true,
             councils: councils
+          });
+        } else {
+          res.json({
+            success: false,
+            msg: 'No se encontraron consejos.'
+          });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
+  static async getCouncilsBeforeAttendant(req, res) {
+    try {
+      await db.sequelize.transaction(async t => {
+        const councils = await db.sequelize.query(`SELECT "Consejo"."institucion", "Consejo"."escuela", "Consejo"."nombre_consejo", "Consejo"."consecutivo", "Consejo"."lugar", "Consejo"."fecha", "Consejo"."hora", "Consejo"."id_tipo_sesion" FROM public."Consejo" INNER JOIN public."Convocado" ON "Consejo"."consecutivo" = "Convocado"."consecutivo" WHERE "Convocado"."cedula" = '${req.params.cedula}' AND "Consejo"."fecha" < '${req.params.fecha}' ORDER BY "Consejo"."fecha" ASC`);
+        if (councils[0].length > 0) {
+          res.json({
+            success: true,
+            councils: councils[0]
           });
         } else {
           res.json({
