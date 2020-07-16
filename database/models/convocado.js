@@ -9,9 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         key: 'consecutivo'
       }
     },
-    cedula: {
-      type: DataTypes.STRING, allowNull: false
-    }
+    cedula: { type: DataTypes.STRING, allowNull: false },
+    limite_solicitud: { type: DataTypes.DATEONLY, allowNull: false }
   }, {
     freezeTableName: true
   });

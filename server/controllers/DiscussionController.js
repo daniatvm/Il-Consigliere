@@ -51,7 +51,7 @@ class DiscussionController {
   static async getRequestsByUser(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.Punto.findAll({ attributes: ['asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_tipo_punto: 2 } });
+        const discussions = await db.Punto.findAll({ attributes: ['id_punto','asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_tipo_punto: 2 } });
         if (discussions.length > 0) {
           res.json({
             success: true,

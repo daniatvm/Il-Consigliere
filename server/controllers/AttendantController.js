@@ -75,9 +75,9 @@ class AttendantController {
   static async store(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const { consecutivo, convocados } = req.body;
+        const { consecutivo, convocados, limite_solicitud } = req.body;
         for (let i = 0; i < convocados.length; i++) {
-          await db.Convocado.create({ cedula: convocados[i].cedula, consecutivo: consecutivo });
+          await db.Convocado.create({ cedula: convocados[i].cedula, consecutivo: consecutivo, limite_solicitud: limite_solicitud });
         }
         res.json({
           success: true

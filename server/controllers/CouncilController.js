@@ -29,7 +29,7 @@ class CouncilController {
   static async getCouncilAttendant(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const council = await db.sequelize.query(`SELECT "Consejo"."institucion", "Consejo"."escuela", "Consejo"."nombre_consejo", "Consejo"."consecutivo", "Consejo"."lugar", "Consejo"."fecha", "Consejo"."hora", "Consejo"."id_tipo_sesion" FROM public."Consejo" INNER JOIN public."Convocado" ON "Consejo"."consecutivo" = "Convocado"."consecutivo" WHERE "Convocado"."cedula" = '${req.params.cedula}' AND "Consejo"."consecutivo" = '${req.params.consecutivo}'`);
+        const council = await db.sequelize.query(`SELECT "Consejo"."institucion", "Consejo"."escuela", "Consejo"."nombre_consejo", "Consejo"."consecutivo", "Consejo"."lugar", "Consejo"."fecha", "Consejo"."hora", "Consejo"."id_tipo_sesion", "Convocado"."limite_solicitud" FROM public."Consejo" INNER JOIN public."Convocado" ON "Consejo"."consecutivo" = "Convocado"."consecutivo" WHERE "Convocado"."cedula" = '${req.params.cedula}' AND "Consejo"."consecutivo" = '${req.params.consecutivo}'`);
         if (council[0].length > 0) {
           res.json({
             success: true,
