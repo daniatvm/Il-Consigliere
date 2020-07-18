@@ -1,10 +1,10 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Permiso', [{
-      nombre: 'gestionarUsuarios'
+      nombre: 'Gestionar Usuarios'
     },
     {
-      nombre: 'gestionarConsejos'
+      nombre: 'Gestionar Consejos'
     }]);
   },
 

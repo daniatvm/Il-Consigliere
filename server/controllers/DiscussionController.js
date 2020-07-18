@@ -51,7 +51,7 @@ class DiscussionController {
   static async getRequestsByUser(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.Punto.findAll({ attributes: ['id_punto','asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_tipo_punto: 2 } });
+        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_tipo_punto: 2 } });
         if (discussions.length > 0) {
           res.json({
             success: true,
@@ -90,10 +90,10 @@ class DiscussionController {
   }
 
   static async update(req, res) {
-    const { id_tipo_punto } = req.body;
+    const { id_tipo_punto, asunto } = req.body;
     try {
       await db.sequelize.transaction(async t => {
-        await db.Punto.update({ id_tipo_punto: id_tipo_punto }, { where: { id_punto: req.params.id_punto } });
+        await db.Punto.update({ id_tipo_punto: id_tipo_punto, asunto: asunto }, { where: { id_punto: req.params.id_punto } });
         res.json({
           success: true
         });

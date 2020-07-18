@@ -9,7 +9,7 @@ router.post('/enviar_link', UserController.sendLink.bind(UserController));
 router.post('/inicio_sesion', UserController.authenticate.bind(UserController));
 router.post('/verificar_token', UserController.verifyToken.bind(UserController));
 router.post('/verificar_clave', UserController.verifyPassword.bind(UserController));
-router.post('/cambiar_clave/:cedula', UserController.changePassword.bind(UserController));
+router.post('/cambiar_clave', UserController.changePassword.bind(UserController));
 router.get('/permisos/:cedula', UserController.roles.bind(UserController));
 router.get('/validar_link/:token', UserController.verifyLink.bind(UserController));
 router.put('/convocado/:cedula', UserController.updateAttendantType.bind(UserController));
