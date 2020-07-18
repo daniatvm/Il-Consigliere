@@ -1,11 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
 body {
-    background: rgb(255, 255, 255);
-    background: -moz-radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(188, 201, 203, 1) 100%);
-    background: -webkit-radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(188, 201, 203, 1) 100%);
-    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(188, 201, 203, 1) 100%);
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#bcc9cb", GradientType=1);
+    background: rgb(225, 237, 238);
+    background: -moz-linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#e1edee", endColorstr="#ffffff", GradientType=1);
     font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.navcolor {
+    background: rgb(225, 237, 238);
+    background: -moz-linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(225, 237, 238, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#e1edee", endColorstr="#ffffff", GradientType=1);
 }
 
 .card-title {
@@ -70,6 +78,12 @@ h4 {
 .my-danger {
     cursor: pointer;
     color: rgb(187, 0, 37);
+}
+
+.my-button {
+    border: none;
+    padding: 0;
+    background: none;
 }
 
 @media only screen and (max-width: 425px) {
