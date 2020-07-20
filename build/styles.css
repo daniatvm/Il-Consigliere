@@ -81,9 +81,9 @@ h4 {
 }
 
 .my-button {
-    border: none;
-    padding: 0;
-    background: none;
+    border: none !important;
+    padding: 0 !important;
+    background: none !important;
 }
 
 @media only screen and (max-width: 425px) {
