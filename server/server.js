@@ -28,6 +28,8 @@ const councilTypeRouter = require('./routes/CouncilTypeRouter');
 app.use('/tipo_consejo', councilTypeRouter);
 const attendantTypeRouter = require('./routes/AttendantTypeRouter');
 app.use('/tipo_convocado', attendantTypeRouter);
+const discussionTypeRouter = require('./routes/DiscussionTypeRouter');
+app.use('/tipo_punto', discussionTypeRouter);
 
 //RUTAS DE REACT
 app.get('/*', (req, res) => {

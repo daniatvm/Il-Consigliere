@@ -21,6 +21,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      orden: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       cedula: {
         allowNull: false,
         type: Sequelize.STRING
@@ -33,6 +37,16 @@ module.exports = {
             tableName: 'Tipo_Punto'
           },
           key: 'id_tipo_punto'
+        }
+      },
+      id_estado_punto: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Estado_Punto'
+          },
+          key: 'id_estado_punto'
         }
       },
       createdAt: {

@@ -12,7 +12,7 @@ class UserController {
     try {
       await db.sequelize.transaction(async t => {
         const users = await db.Usuario.findAll({
-          attributes: ['cedula', 'nombre', 'apellido'], order: ['nombre']
+          attributes: ['cedula', 'nombre', 'apellido', 'segundo_apellido'], order: ['nombre']
         });
         if (users.length > 0) {
           res.json({
@@ -124,12 +124,12 @@ class UserController {
   }
 
   static async store(req, res) {
-    const { cedula, nombre, apellido, clave, id_tipo_convocado } = req.body;
+    const { cedula, nombre, apellido, segundo_apellido, clave, id_tipo_convocado } = req.body;
     try {
       await db.sequelize.transaction(async t => {
         const encryptedPass = await this.encryptPassword(clave);
         await db.Usuario.create({
-          cedula: cedula, nombre: nombre, apellido: apellido,
+          cedula: cedula, nombre: nombre, apellido: apellido, segundo_apellido: segundo_apellido,
           clave: encryptedPass, id_tipo_convocado: id_tipo_convocado
         });
         res.json({
@@ -154,7 +154,8 @@ class UserController {
             const info = {
               cedula: user.cedula,
               nombre: user.nombre,
-              apellido: user.apellido
+              apellido: user.apellido,
+              segundo_apellido: user.segundo_apellido
             }
             const token = jwt.sign({ user: info }, process.env.KEY,
               { algorithm: 'HS512' });
@@ -205,7 +206,7 @@ class UserController {
     try {
       await db.sequelize.transaction(async t => {
         const user = await db.Usuario.findOne({
-          attributes: ['cedula', 'nombre', 'apellido', 'id_tipo_convocado'],
+          attributes: ['cedula', 'nombre', 'apellido', 'segundo_apellido', 'id_tipo_convocado'],
           where: { cedula: req.params.cedula }
         });
         if (user) {
@@ -243,10 +244,10 @@ class UserController {
   }
 
   static async update(req, res) {
-    const { cedula, nombre, apellido } = req.body;
+    const { cedula, nombre, apellido, segundo_apellido } = req.body;
     try {
       await db.sequelize.transaction(async t => {
-        await db.Usuario.update({ cedula: cedula, nombre: nombre, apellido: apellido }, { where: { cedula: req.params.cedula } });
+        await db.Usuario.update({ cedula: cedula, nombre: nombre, apellido: apellido, segundo_apellido: segundo_apellido }, { where: { cedula: req.params.cedula } });
         res.json({
           success: true
         });

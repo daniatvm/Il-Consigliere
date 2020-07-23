@@ -5,7 +5,7 @@ class DiscussionController {
   static async getDiscussions(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto'], where: { consecutivo: req.params.consecutivo, id_tipo_punto: 1 } });
+        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto', 'orden', 'id_tipo_punto'], where: { consecutivo: req.params.consecutivo, id_estado_punto: 1 }, order: ['orden'] });
         if (discussions.length > 0) {
           res.json({
             success: true,
@@ -28,7 +28,7 @@ class DiscussionController {
   static async getRequests(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.sequelize.query(`SELECT "Punto"."id_punto", "Punto"."asunto", "Usuario"."nombre", "Usuario"."apellido" FROM public."Punto" INNER JOIN public."Usuario" ON "Punto"."cedula" = "Usuario"."cedula" WHERE "Punto"."consecutivo" = '${req.params.consecutivo}' AND "Punto"."id_tipo_punto" = 2`);
+        const discussions = await db.sequelize.query(`SELECT "Punto"."id_punto", "Punto"."asunto", "Usuario"."nombre", "Usuario"."apellido" FROM public."Punto" INNER JOIN public."Usuario" ON "Punto"."cedula" = "Usuario"."cedula" WHERE "Punto"."consecutivo" = '${req.params.consecutivo}' AND "Punto"."id_estado_punto" = 2`);
         if (discussions[0].length > 0) {
           res.json({
             success: true,
@@ -51,7 +51,7 @@ class DiscussionController {
   static async getRequestsByUser(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_tipo_punto: 2 } });
+        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto'], where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula, id_estado_punto: 2 } });
         if (discussions.length > 0) {
           res.json({
             success: true,
@@ -72,11 +72,12 @@ class DiscussionController {
   }
 
   static async store(req, res) {
-    const { consecutivo, asunto, id_tipo_punto, cedula } = req.body;
+    const { consecutivo, asunto, orden, cedula, id_estado_punto, id_tipo_punto } = req.body;
     try {
       await db.sequelize.transaction(async t => {
         await db.Punto.create({
-          consecutivo: consecutivo, asunto: asunto, id_tipo_punto: id_tipo_punto, cedula: cedula
+          consecutivo: consecutivo, asunto: asunto, id_estado_punto: id_estado_punto,
+          cedula: cedula, id_tipo_punto: id_tipo_punto, orden: orden
         });
         res.json({
           success: true
@@ -89,11 +90,11 @@ class DiscussionController {
     }
   }
 
-  static async update(req, res) {
-    const { id_tipo_punto, asunto } = req.body;
+  static async updateDiscussionsState(req, res) {
+    const { id_estado_punto, asunto, orden } = req.body;
     try {
       await db.sequelize.transaction(async t => {
-        await db.Punto.update({ id_tipo_punto: id_tipo_punto, asunto: asunto }, { where: { id_punto: req.params.id_punto } });
+        await db.Punto.update({ id_estado_punto: id_estado_punto, asunto: asunto, orden: orden }, { where: { id_punto: req.params.id_punto } });
         res.json({
           success: true
         });

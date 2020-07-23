@@ -14,6 +14,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      segundo_apellido: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       clave: {
         allowNull: false,
         type: Sequelize.STRING,
