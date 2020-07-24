@@ -20,7 +20,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      escuela: {
+      carrera: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      campus: {
         allowNull: false,
         type: Sequelize.STRING
       },

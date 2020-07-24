@@ -1,4 +1,5 @@
 const db = require('../../database/models');
+const nodemailer = require('nodemailer');
 
 class AttendantController {
 
@@ -28,7 +29,7 @@ class AttendantController {
   static async getUserNames(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const convocados = await db.sequelize.query(`SELECT "Usuario"."nombre", "Usuario"."apellido", "Usuario"."id_tipo_convocado" FROM public."Usuario" INNER JOIN public."Convocado" ON "Usuario"."cedula" = "Convocado"."cedula" WHERE "Convocado"."consecutivo" = '${req.params.consecutivo}'`);
+        const convocados = await db.sequelize.query(`SELECT "Usuario"."nombre", "Usuario"."apellido", "Usuario"."segundo_apellido", "Usuario"."id_tipo_convocado" FROM public."Usuario" INNER JOIN public."Convocado" ON "Usuario"."cedula" = "Convocado"."cedula" WHERE "Convocado"."consecutivo" = '${req.params.consecutivo}'`);
         if (convocados[0].length > 0) {
           res.json({
             success: true,
@@ -76,12 +77,51 @@ class AttendantController {
     try {
       await db.sequelize.transaction(async t => {
         const { consecutivo, convocados, limite_solicitud } = req.body;
+        let mailList = [];
         for (let i = 0; i < convocados.length; i++) {
-          await db.Convocado.create({ cedula: convocados[i].cedula, consecutivo: consecutivo, limite_solicitud: limite_solicitud });
+          await db.Convocado.create({ cedula: convocados[i], consecutivo: consecutivo, limite_solicitud: limite_solicitud });
+          let correos = await db.Correo.findAll({ attributes: ['correo'], where: { cedula: convocados[i] } });
+          mailList = mailList.concat(correos);
         }
-        res.json({
-          success: true
-        });
+        if (mailList.length > 0) {
+          const consejo = await db.Consejo.findOne({ where: { consecutivo: consecutivo } });
+          const info = consejo.dataValues;
+          let toList = [];
+          for (let i = 0; i < mailList.length; i++) {
+            toList.push(mailList[i].dataValues.correo);
+          }
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: `${process.env.EMAIL}`,
+              pass: `${process.env.EMAIL_PASS}`
+            }
+          });
+          const mailOptions = {
+            from: `${process.env.EMAIL}`,
+            to: `${toList}`,
+            subject: `Convocatoria al ${info.nombre_consejo} ${info.consecutivo}`,
+            text:
+              `Los administradores del Consejo de Ingeniería en Computación del Campus Tecnológico Local de San José le han convocado a la sesión ${info.id_tipo_sesion === 1 ? 'ordinaria' : info.id_tipo_sesion === 2 ? 'extraordinaria' : 'de Consulta Formal'} ${info.consecutivo}. Información de la Convocatoria:\n\n${info.institucion}\n${info.carrera}\n${info.campus}\n${info.nombre_consejo}\nLugar: ${info.lugar}\nFecha: ${info.fecha}\nHora: ${info.hora}\n\nPara visualizar puntos de agenda y realizar solicitudes, por favor inicie sesión en https://il-consigliere.herokuapp.com/acceso`
+          };
+          transporter.sendMail(mailOptions, (err, resp) => {
+            if (err) {
+              res.status(500).json({
+                msg: 'Error.',
+                err: err
+              });
+            } else {
+              res.json({
+                success: true,
+                msg: resp
+              });
+            }
+          });
+        } else {
+          res.json({
+            success: true,
+          });
+        }
       });
     } catch (error) {
       res.status(500).json({
@@ -94,6 +134,21 @@ class AttendantController {
     try {
       await db.sequelize.transaction(async t => {
         await db.Convocado.destroy({ where: { consecutivo: req.params.consecutivo } });
+        res.json({
+          success: true
+        });
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
+  static async removeByUser(req, res) {
+    try {
+      await db.sequelize.transaction(async t => {
+        await db.Convocado.destroy({ where: { consecutivo: req.params.consecutivo, cedula: req.params.cedula } });
         res.json({
           success: true
         });

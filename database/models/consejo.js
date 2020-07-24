@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     institucion: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Instituto Tecnológico de Costa Rica' },
-    escuela: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Escuela de Ingeniería en Computación' },
+    carrera: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Ingeniería en Computación' },
+    campus: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Campus Tecnológico Local San José' },
     nombre_consejo: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Consejo de Unidad Desconcentrada' },
     fecha: { type: DataTypes.DATEONLY, allowNull: false },
     hora: { type: DataTypes.TIME, allowNull: false },
