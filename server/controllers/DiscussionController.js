@@ -5,7 +5,7 @@ class DiscussionController {
   static async getDiscussions(req, res) {
     try {
       await db.sequelize.transaction(async t => {
-        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto', 'orden', 'id_tipo_punto'], where: { consecutivo: req.params.consecutivo, id_estado_punto: 1 }, order: ['orden'] });
+        const discussions = await db.Punto.findAll({ attributes: ['id_punto', 'asunto', 'orden', 'id_tipo_punto'], where: { consecutivo: req.params.consecutivo, id_estado_punto: 1 }, order: [['orden', 'ASC']] });
         if (discussions.length > 0) {
           res.json({
             success: true,
@@ -95,6 +95,24 @@ class DiscussionController {
     try {
       await db.sequelize.transaction(async t => {
         await db.Punto.update({ id_estado_punto: id_estado_punto, asunto: asunto, orden: orden }, { where: { id_punto: req.params.id_punto } });
+        res.json({
+          success: true
+        });
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
+  static async updateOrder(req, res) {
+    const { puntos } = req.body;
+    try {
+      await db.sequelize.transaction(async t => {
+        for (let i = 0; i < puntos.length; i++) {
+          await db.Punto.update({ orden: i }, { where: { id_punto: puntos[i].id_punto } });
+        }
         res.json({
           success: true
         });
