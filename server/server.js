@@ -30,6 +30,8 @@ const attendantTypeRouter = require('./routes/AttendantTypeRouter');
 app.use('/tipo_convocado', attendantTypeRouter);
 const discussionTypeRouter = require('./routes/DiscussionTypeRouter');
 app.use('/tipo_punto', discussionTypeRouter);
+const votingRouter = require('./routes/VotingRouter');
+app.use('/votacion', votingRouter);
 
 //RUTAS DE REACT
 app.get('/*', (req, res) => {

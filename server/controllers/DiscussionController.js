@@ -71,6 +71,29 @@ class DiscussionController {
     }
   }
 
+  static async getVotingDiscussions(req, res) {
+    try {
+      await db.sequelize.transaction(async t => {
+        const discussions = await db.sequelize.query(`SELECT "Punto"."id_punto", "Punto"."asunto", "Punto"."id_tipo_punto", "Votacion"."favor", "Votacion"."contra", "Votacion"."abstencion" FROM public."Punto" LEFT JOIN public."Votacion" ON "Punto"."id_punto" = "Votacion"."id_punto" WHERE "Punto"."consecutivo" = '${req.params.consecutivo}' AND "Punto"."id_estado_punto" = 1 ORDER BY "Punto"."orden"`);
+        if (discussions[0].length > 0) {
+          res.json({
+            success: true,
+            discussions: discussions[0]
+          });
+        } else {
+          res.json({
+            success: false,
+            msg: 'No se encontraron puntos.'
+          });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
   static async store(req, res) {
     const { consecutivo, asunto, orden, cedula, id_estado_punto, id_tipo_punto } = req.body;
     try {
