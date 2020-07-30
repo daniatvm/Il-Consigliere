@@ -77,6 +77,7 @@ class AttendantController {
     try {
       await db.sequelize.transaction(async t => {
         const { consecutivo, convocados, limite_solicitud } = req.body;
+        console.log(limite_solicitud);
         let mailList = [];
         for (let i = 0; i < convocados.length; i++) {
           await db.Convocado.create({ cedula: convocados[i], consecutivo: consecutivo, limite_solicitud: limite_solicitud });
@@ -102,7 +103,7 @@ class AttendantController {
             to: `${toList}`,
             subject: `Convocatoria al ${info.nombre_consejo} ${info.consecutivo}`,
             text:
-              `Los administradores del Consejo de Ingeniería en Computación del Campus Tecnológico Local de San José le han convocado a la sesión ${info.id_tipo_sesion === 1 ? 'ordinaria' : info.id_tipo_sesion === 2 ? 'extraordinaria' : 'de Consulta Formal'} ${info.consecutivo}. Información de la Convocatoria:\n\n${info.institucion}\n${info.carrera}\n${info.campus}\n${info.nombre_consejo}\nLugar: ${info.lugar}\nFecha: ${info.fecha}\nHora: ${info.hora}\n\nPara visualizar puntos de agenda y realizar solicitudes, por favor inicie sesión en https://il-consigliere.herokuapp.com/acceso`
+              `Los administradores del Consejo de Ingeniería en Computación del Campus Tecnológico Local de San José le han convocado a la sesión ${info.id_tipo_sesion === 1 ? 'ordinaria' : info.id_tipo_sesion === 2 ? 'extraordinaria' : 'de Consulta Formal'} ${info.consecutivo}. Información de la Convocatoria:\n\n${info.institucion}\n${info.carrera}\n${info.campus}\n${info.nombre_consejo}\nLugar: ${info.lugar}\nFecha: ${info.fecha}\nHora: ${info.hora}\n\nPara visualizar los puntos de agenda, las personas convocadas y realizar solicitudes, por favor inicie sesión en https://il-consigliere.herokuapp.com/acceso`
           };
           transporter.sendMail(mailOptions, (err, resp) => {
             if (err) {
