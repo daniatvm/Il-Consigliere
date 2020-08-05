@@ -124,12 +124,12 @@ class CouncilController {
       await db.sequelize.transaction(async t => {
         await db.Consejo.create({
           consecutivo: consecutivo, id_tipo_sesion: id_tipo_sesion,
-          fecha: fecha, hora: hora, lugar: lugar
+          fecha: fecha, hora: hora, lugar: lugar, editable: 1
         });
         for (let i = 0; i < puntos.length; i++) {
           await db.Punto.create({
-            asunto: puntos[i], consecutivo: consecutivo, cedula: cedula, id_estado_punto: id_estado_punto,
-            id_tipo_punto: 2, orden: i
+            asunto: puntos[i].asunto, consecutivo: consecutivo, cedula: cedula, id_estado_punto: id_estado_punto,
+            id_tipo_punto: puntos[i].id_tipo_punto, orden: i
           });
         }
         res.json({
@@ -164,6 +164,23 @@ class CouncilController {
     } catch (error) {
       res.status(500).json({
         msg: 'Error interno del servidor.',
+      });
+    }
+  }
+
+  static async notEditable(req, res) {
+    try {
+      await db.sequelize.transaction(async t => {
+        await db.Consejo.update({
+          editable: 0
+        }, { where: { consecutivo: req.params.consecutivo } });
+        res.json({
+          success: true
+        });
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
       });
     }
   }

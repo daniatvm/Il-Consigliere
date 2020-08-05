@@ -10,6 +10,7 @@ router.get('/anteriores/por_usuario/:cedula/:fecha', CouncilController.getCounci
 router.get('/por_usuario/:cedula/:fecha', CouncilController.getCouncilsByUser);
 router.get('/convocado/:consecutivo/:cedula', CouncilController.getCouncilAttendant);
 router.get('/:consecutivo', CouncilController.getCouncil);
+router.put('/no_editable/:consecutivo', CouncilController.notEditable);
 router.put('/:consecutivo', CouncilController.update);
 router.delete('/:consecutivo', CouncilController.remove);
 

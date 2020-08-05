@@ -44,6 +44,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      editable: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATEONLY,

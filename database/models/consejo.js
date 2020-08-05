@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     nombre_consejo: { type: DataTypes.STRING, allowNull: false, defaultValue: 'Consejo de Unidad Desconcentrada' },
     fecha: { type: DataTypes.DATEONLY, allowNull: false },
     hora: { type: DataTypes.TIME, allowNull: false },
-    lugar: { type: DataTypes.STRING, allowNull: false }
+    lugar: { type: DataTypes.STRING, allowNull: false },
+    editable: { type: DataTypes.BOOLEAN, allowNull: false }
   }, {
     freezeTableName: true
   });
