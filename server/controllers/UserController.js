@@ -39,6 +39,55 @@ class UserController {
     return hash;
   }
 
+  static async passwordReset(req, res) {
+    let { correos, cedula } = req.body;
+    const formatoCorreos = [];
+    for (let i = 0; i < correos.length; i++) {
+      formatoCorreos.push(correos[i].correo);
+    }
+    try {
+      await db.sequelize.transaction(async t => {
+        const token = crypto.randomBytes(20).toString('Hex');
+        await db.Link.create({
+          token: token,
+          expiration: Date.now() + 10800000,
+          cedula: cedula
+        });
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: `${process.env.EMAIL}`,
+            pass: `${process.env.EMAIL_PASS}`
+          }
+        });
+        const mailOptions = {
+          from: `${process.env.EMAIL}`,
+          to: `${formatoCorreos}`,
+          subject: 'Solicitud de nueva contraseña en Il Consigliere',
+          text:
+            `Usted ha solicitado cambiar su contraseña, por favor haga click en la siguiente dirección y llene los datos solicitados:\n\nhttps://il-consigliere.herokuapp.com/gUsuarios/cambioClave/${token}\n\nSe le recuerda que esta dirección expirará en 3 horas.\n\nSaludos,\nConsejo de Ingeniería en Computación.`
+        };
+        transporter.sendMail(mailOptions, (err, resp) => {
+          if (err) {
+            res.status(500).json({
+              msg: 'Error.',
+              err: err
+            });
+          } else {
+            res.json({
+              success: true,
+              msg: resp
+            });
+          }
+        })
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
   static async sendLink(req, res) {
     const { correo, permisos, id_tipo_convocado } = req.body;
     try {
@@ -108,6 +157,33 @@ class UserController {
           res.json({
             success: true,
             links: links
+          });
+        } else {
+          res.json({
+            success: false,
+            msg: 'La dirección ha expirado o es inválida.'
+          });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        msg: 'Error interno del servidor.'
+      });
+    }
+  }
+
+  static async verifyRecovery(req, res) {
+    const token = req.params.token;
+    try {
+      await db.sequelize.transaction(async t => {
+        const link = await db.Link.findOne({
+          where: { token: token, expiration: { [Op.gt]: Date.now() } }
+        });
+        await db.Link.destroy({ where: { token: token } });
+        if (link) {
+          res.json({
+            success: true,
+            cedula: link.cedula
           });
         } else {
           res.json({

@@ -17,22 +17,15 @@ module.exports = {
       },
       id_permiso: {
         type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'Permiso'
-          },
-          key: 'id_permiso'
-        }
+        allowNull: true
       },
       id_tipo_convocado: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: {
-            tableName: 'Tipo_Convocado'
-          },
-          key: 'id_tipo_convocado'
-        }
+        allowNull: true
+      },
+      cedula: {
+        type: Sequelize.STRING,
+        allowNull: true
       }
     });
   },
