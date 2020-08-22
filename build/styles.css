@@ -41,6 +41,20 @@ h4 {
     color: navy;
 }
 
+.my-link {
+    color: navy;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: white;
+}
+
+.my-disabled {
+    cursor: pointer;
+    color: grey;
+}
+
 .my-muted {
     color: grey;
 }
@@ -70,13 +84,7 @@ h4 {
     width: 180px !important;
 }
 
-.my-success {
-    cursor: pointer;
-    color: rgb(90, 180, 0);
-}
-
 .my-danger {
-    cursor: pointer;
     color: rgb(187, 0, 37);
 }
 
