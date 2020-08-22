@@ -1,11 +1,11 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Usuario_Permiso', [{
-      cedula: '117200790',
+      cedula: '1234',
       id_permiso: 1
     },
     {
-      cedula: '117200790',
+      cedula: '1234',
       id_permiso: 2
     }]);
   },
